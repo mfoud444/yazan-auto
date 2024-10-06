@@ -67,7 +67,7 @@ const languageOptions: { label: string; key: Language; value: Language }[] = [
       <div class="navbar-start">
         <button
           @click="goHome"
-          class="btn btn-ghost normal-case text-xl gtext"
+          class="btn btn-ghost normal-case text-xl "
         >
           {{ t('common.nameApp') }}
         </button>
