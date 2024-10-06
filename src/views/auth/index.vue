@@ -24,16 +24,18 @@ function handleFinish() {
 </script>
 
 <template>
+
+   
   <div class="grid grid-cols-1 md:grid-cols-2 h-full dark:text-white">
 
-    <div class="bg-red-200 hidden   md:flex md:flex-col md:gap-4 md:justify-center md:items-center">
+    <div class=" hidden   md:flex md:flex-col md:gap-4 md:justify-center md:items-center">
       <LogoApp :size="90" />
       <div class="font-bold p-4 gtext text-5xl">{{ t('common.nameApp') }}</div>
     </div>
 
 
 
-    <div class="bg-blue-100 dark:bg-violet-950 flex items-center justify-center">
+    <div class="bg-red-100 dark:bg-violet-950 flex items-center justify-center">
       <div class="grid grid-rows-3 h-full  place-content-between ">
 
         <div class="row-span-2 flex flex-col gap-12 h-full justify-end pb-8">

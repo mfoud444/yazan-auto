@@ -32,6 +32,16 @@ onMounted(() => {
 </script>
 
 <template>
+        <div class="background">
+            <!-- <span></span>
+            <span></span>
+            <span></span>
+            <span></span> -->
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+      
   <NConfigProvider
     class="h-full"
     :theme="theme"
@@ -42,4 +52,5 @@ onMounted(() => {
       <RouterView />
     </NaiveProvider>
   </NConfigProvider>
+</div>
 </template>

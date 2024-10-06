@@ -90,7 +90,7 @@ onBeforeUnmount(() => {
     <div class="flex flex-col  md:gap-8  z-46 justify-end items-center relative">
       <!-- App Name with dynamic classes -->
       <div
-        class="first-letter:font-bold   first-letter:font-serif font-bold gtext first-letter:text-blue-700"
+        class="first-letter:font-bold   first-letter:font-serif font-bold gtexth first-letter:text-blue-700"
         :class="[isMobile ? 'first-letter:text-7xl text-5xl' : 'first-letter:text-9xl text-7xl']"
       >
         {{ t('common.nameApp') }}
