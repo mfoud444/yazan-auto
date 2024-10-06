@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<!-- data-theme="synthwave" -->
+	<meta charset="UTF-8">
+	<link rel="icon" type="image/svg+xml" href="/logo.png">
+	<link rel="apple-touch-icon" href="/logo.png">
+	<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+	<meta content="yes" name="apple-mobile-web-app-capable"/>
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+		<title>Yazan Auto</title>
+	<meta name="description" content="Power auto Instagram">
+	<script type="application/ld+json">
+		{
+		  "@context": "https://schema.org",
+		  "@type": "WebSite",
+		  "name": "Yazan",
+		  "description": "Yazan auto",
+		  "url": "https://AgriculturalExpert.app",
+		  "logo": "https://AgriculturalExpert.app/assets/logo-d5785398.png",
+		  "potentialAction": {
+		  "@type": "SearchAction",
+		  "target": {
+			"@type": "EntryPoint",
+			"urlTemplate": "https://query.example.com/search?q={search_term_string}"
+		  },
+		  "query-input": "required name=search_term_string"
+		  }
+		}
+		</script>
+		<style>
+			/* HTML: <div class="loader"></div> */
+			.gradient {
+  background: #833ab4;
+  background: linear-gradient(
+    to right,
+    #833ab4,#fd1d1d,#fcb045
+  );
+}
+		</style>
+</head>
+
+<body class="dark:bg-violet-950">
+	<div class=" width: 100vw; min-height: 100vh; gradient bg-gradient-to-r from-[#833ab4] via-[#fd1d1d] to-[#fcb045]"></div>
+	<!-- <div
+	style="width: 100vw; min-height: 100vh; position: fixed; z-index: -1; display: flex; justify-content: center; padding: 120px 24px 160px 24px; pointer-events: none;">
+	<div
+	  style="background: radial-gradient(circle, rgba(2, 0, 36, 0) 0, #fafafa 100%); position: absolute; content: ''; z-index: 2; width: 100%; height: 100%; top: 0;">
+	</div>
+  
+	<div
+	  style="z-index: 3; width: 100%; max-width: 640px; background-image: radial-gradient(at 27% 37%, hsla(215, 98%, 61%, 1) 0px, transparent 0%), radial-gradient(at 97% 21%, hsla(125, 98%, 72%, 1) 0px, transparent 50%), radial-gradient(at 52% 99%, hsla(354, 98%, 61%, 1) 0px, transparent 50%), radial-gradient(at 10% 29%, hsla(256, 96%, 67%, 1) 0px, transparent 50%), radial-gradient(at 97% 96%, hsla(38, 60%, 74%, 1) 0px, transparent 50%), radial-gradient(at 33% 50%, hsla(222, 67%, 73%, 1) 0px, transparent 50%), radial-gradient(at 79% 53%, hsla(343, 68%, 79%, 1) 0px, transparent 50%); position: absolute; height: 100%; filter: blur(100px) saturate(150%); top: 80px; opacity: 0.15;">
+	</div>
+  </div>
+  <div style="background: #bb9ce6;background: -webkit-linear-gradient(151deg, #bb9ce6 0%, #ddd4e9 100%);background: linear-gradient(151deg, #bb9ce6 0%, #ddd4e9 100%);"></div> -->
+	<div id="app">
+		<style>
+			*{
+				padding: 0px;
+				margin: 0px;
+			}
+			.loading-wrap {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				height: 90vh;
+				
+			}
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 50px;
+  aspect-ratio: 1;
+  display: grid;
+}
+.loader:before,
+.loader:after {
+  content: "";
+  grid-area: 1/1;
+  border-radius: 50%;
+  background: #042841;
+  -webkit-mask:repeating-linear-gradient(#000 0 10px,#0000 0 20px);
+}
+.loader:after {
+  -webkit-mask:repeating-linear-gradient(#0000 0 10px,#000 0 20px);
+  animation: l36 1.5s infinite;
+}
+@keyframes l36 {
+  0%,
+  10%  {transform: rotate(0)      translate(0)}
+  35%  {transform: rotate(0)      translate(100%)}
+  66%  {transform: rotate(180deg) translate(100%)}
+  90%,
+  100% {transform: rotate(180deg) translate(0) }
+}
+		</style>
+		<div class="loading-wrap">
+			<div class="loader"></div> 
+		</div>
+		
+	</div>
+	<script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>
