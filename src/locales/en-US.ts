@@ -14,7 +14,7 @@ export default {
   app: {
     start: 'Start',
     getStart: 'Get started',
-    descApp: "Yazan Love",
+    descApp: "Today is a further",
     copyWrite:  "© " + new Date().getFullYear() + " Rand AI. All rights reserved",
     termsOfUse: "Terms of use",
     privacyPolicy: "Privacy policy",
