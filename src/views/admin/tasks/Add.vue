@@ -1,26 +1,21 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
-import { NForm, NInput, NButton, NDatePicker, FormInst, FormRules, NSwitch, NGrid, NFormItemGi, NSelect, NInputNumber, useMessage } from 'naive-ui';
+import { NForm, NInput, NButton,NUpload, NDatePicker, FormInst, FormRules, NSwitch, NGrid, NFormItemGi, NSelect, NInputNumber, useMessage } from 'naive-ui';
 import { t } from '@/locales';
 import { useTasksStore, useCompanyStore } from '@/store';
 import { useBasicLayout } from '@/hooks/useBasicLayout';
 import { getImageUrl } from '@/utils/supabasehelper';
-
+import { get, post, put } from '@/utils/request'
 const { isMobile } = useBasicLayout();
 const span = computed(() => (isMobile ? 24 : 12));
-
 const modelStore = useTasksStore();
 const companyStore = useCompanyStore();
 const message = useMessage();
 const formRef = ref<FormInst | null>(null);
 const loading = ref(false);
 const model = ref<APIAI.Tasks>(modelStore.initState());
-
-// Validation rules
 const rules: FormRules = {
-  name: [{ required: true, message: t('common.nameRequired'), trigger: ['input', 'blur'] }],
-  modelCode: [{ required: true, message: t('common.modelCodeRequired'), trigger: ['input', 'blur'] }],
-  companyId: [{ required: true, message: t('common.companyIdRequired'), trigger: ['input', 'blur'] }],
+  // name: [{ required: true, message: t('common.nameRequired'), trigger: ['input', 'blur'] }],
 };
 
 
@@ -29,12 +24,13 @@ const dataOptionsUploaded = [
   { label: t('common.UploadAccount'), value: 'UploadAccount' },
 ];
 
-const mediaType = [
-{ label: t('common.image'), value: 'Image' },
- 
-  { label: t('common.video'), value: 'Video' },
-  { label: t('common.elmob'), value: 'Elmob' },
-];
+
+
+const mediaType =[
+      { label: t('common.image'), value: 'Image' },
+      { label: t('common.video'), value: 'Video' },
+      { label: t('common.elmob'), value: 'Elmob' },
+    ];
 
 const typeUpload = [
 { label: t('common.URL'), value: 'URL' },
@@ -42,7 +38,7 @@ const typeUpload = [
   { label: t('common.media'), value: 'Media' },
 
 ];
-// Options for select fields
+// // Options for select fields
 const dataOptions = [
   { label: t('common.text'), value: 'UploadStore' },
   { label: t('common.image'), value: 'Image' },
@@ -50,6 +46,9 @@ const dataOptions = [
   { label: t('common.video'), value: 'Video' },
   { label: t('common.documents'), value: 'Documents' }
 ];
+
+const accepts = computed(() => (model.value.mediaType.value === 'Image' ? 'image/*' : 'video/*'));
+
 
 const companies = ref<any[]>([]);
 
@@ -73,6 +72,7 @@ async function fetchData(): Promise<void> {
       value: company.id,
       logoUrl: company.logoUrl // Optionally include the logo URL for display
     }));
+    model.value.accountId = companies.value[0].value
   } catch (error: any) {
     console.error(t('chat.dataFetchError'), error.message);
   }
@@ -83,7 +83,23 @@ onMounted(fetchData);
 async function handleAddData() {
   try {
     loading.value = true;
-    await modelStore.insertDataAction(model.value);
+    // await modelStore.insertDataAction(model.value);
+    const sesssionId = companyStore.listCompanies.find(company => company.id === model.value.accountId)?.sessionKey
+    console.log("sesssionId", sesssionId)
+    const payload = {
+      sessionid: sesssionId,
+        url:model.value.url,
+        // caption:model.value.description
+      };
+    const response = await post<any>({
+        url: '/photo/upload_to_story/by_url',
+        data: payload,
+        headers: {
+          'accept': 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      console.log("response", response)
     loading.value = false;
     modelStore.showModelAdd = false;
     message.success(t('common.addSuccess'));
@@ -95,7 +111,7 @@ async function handleAddData() {
 }
 
 function isButtonDisabled() {
-  return !model.value.name || !model.value.modelCode || !model.value.companyId || loading.value;
+  return  loading.value;
 }
 
 function handleValidateButtonClick(e: MouseEvent) {
@@ -108,6 +124,41 @@ function handleValidateButtonClick(e: MouseEvent) {
     }
   });
 }
+
+const customRequest = async ({ file, data: dataParams, onFinish, onError, onProgress }: UploadCustomRequestOptions) => {
+    try {
+      if (!dataParams) {
+        throw new Error('dataParams is undefined');
+      }
+
+      const progressEvent = { loaded: 20, total: 100 };
+      const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+      onProgress({ percent: percentCompleted });
+
+      const { data, error } = await supabase.storage.from(dataParams.bucket).upload(`${file.name}`, file.file!, {
+        cacheControl: '3600',
+        upsert: false
+      });
+
+      if (error) {
+        if (error.statusCode === "409" && error.error === "Duplicate") {
+          model.value.logoUrl = file.name;
+          onFinish()
+        } else {
+          throw error;
+        }
+      }
+
+      if (data) {
+        model.value.logoUrl = data.path;
+        onFinish();
+      }
+    } catch (error: any) {
+      console.log(error);
+      message.error(error.message);
+      onError();
+    }
+  };
 </script>
 
 <template>
@@ -125,11 +176,11 @@ function handleValidateButtonClick(e: MouseEvent) {
         <NGrid :span="span" :x-gap="24">
 
           
-          <NFormItemGi :span="span" path="companyId" :label="t('common.account')">
+          <NFormItemGi :span="span" path="accountId" :label="t('common.selectAccount')">
             <NSelect
-              v-model:value="model"
+              v-model:value="model.accountId"
               :options="companies"
-              :placeholder="t('common.selectCompany')"
+              :placeholder="t('common.selectAccount')"
               clearable
             />
           </NFormItemGi>
@@ -146,17 +197,37 @@ function handleValidateButtonClick(e: MouseEvent) {
           </NFormItemGi>
           
 
-               
-          <NFormItemGi :span="span" path="companyId" :label="t('common.company')">
+          <NFormItemGi :span="span" path="uploadTo" :label="t('common.uploadTo')">
             <NSelect
-              v-model:value="model.companyId"
-              :options="mediaType"
-              :placeholder="t('common.selectCompany')"
+              v-model:value="model.uploadTo"
+              :options="dataOptionsUploaded"
+              multiple
+              :placeholder="t('common.uploadTo')"
               clearable
             />
           </NFormItemGi>
 
-          <NFormItemGi :span="span" path="url" :label="t('common.URL')">
+               
+          <NFormItemGi :span="span" path="mediaType" :label="t('common.mediaType')">
+            <NSelect
+              v-model:value="model.mediaType"
+              :options="mediaType"
+              :placeholder="t('common.mediaType')"
+              clearable
+            />
+          </NFormItemGi>
+
+
+          <NFormItemGi :span="span" path="typeUpload" :label="t('common.typeUpload')">
+            <NSelect
+              v-model:value="model.typeUpload"
+              :options="typeUpload"
+              :placeholder="t('common.typeUpload')"
+              clearable
+            />
+          </NFormItemGi>
+
+          <NFormItemGi v-if="model.typeUpload === 'URL'" :span="span" path="url" :label="t('common.URL')">
             <NInput
               v-model:value="model.url"
                 :input-props="{ type: 'url' }"
@@ -168,35 +239,30 @@ function handleValidateButtonClick(e: MouseEvent) {
           </NFormItemGi>
    
 
-          <NFormItemGi :span="span" path="companyId" :label="t('common.company')">
-            <NSelect
-              v-model:value="model.companyId"
-              :options="dataOptionsTypeUploaded"
-              :placeholder="t('common.selectCompany')"
-              clearable
+     
+
+          <NFormItemGi
+           v-if="model.typeUpload === 'Media'"
+            :span="span"
+            path="files"
+            :label="t('common.files')"
+          >
+            <NUpload
+              :accept="accepts"
+              list-type="image-card"
+              :max="1"
+              :data="{ 'bucket': 'tasks' }"
+              path="files"
+              :custom-request="customRequest"
             />
           </NFormItemGi>
 
 
-          <NFormItemGi :span="span" path="inputData" :label="t('common.inputData')">
-            <NSelect
-              v-model:value="model.inputData"
-              :options="dataOptionsUploaded"
-              multiple
-              :placeholder="t('common.selectInputData')"
-              clearable
-            />
+          <NFormItemGi :span="span" path="dateTime" :label="t('common.dateTime')">
+            <NDatePicker v-model:value="model.dateTimeUpload" type="datetime" clearable />
           </NFormItemGi>
 
 
-
-
-
-      
-
-          <NFormItemGi :span="span" path="modelCode" :label="t('common.modelCode')">
-            <NDatePicker v-model:value="timestamp" type="datetime" clearable />
-          </NFormItemGi>
           <NFormItemGi :span="span" path="description" :label="t('common.description')">
             <NInput
             type="textaria"

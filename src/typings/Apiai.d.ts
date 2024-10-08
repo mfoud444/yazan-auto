@@ -2,7 +2,7 @@ declare namespace APIAI {
 
     type UploadedTo = 'UploadStory' | 'UploadAccount' 
     type MediaType = 'Image' | 'Video' | 'Elbom'
-    type TypeUpload = 'URL' | 'MEDIA'
+    type TypeUpload = 'URL' | 'Media'
     interface CompanyAI {
       id?: string; // UUID
       name: string;
@@ -24,7 +24,7 @@ declare namespace APIAI {
       mediaType: MediaType;
       description?: string; 
       isActivate: boolean;
-      dateTime:DateTime;
+      dateTimeUpload:DateTime;
       createdAt: string; 
       updatedAt: string; 
       uploadTo: UploadedTo[];

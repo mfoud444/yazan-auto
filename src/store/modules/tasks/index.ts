@@ -1,14 +1,20 @@
 import { deleteDataFromTable, fetchDataFromTable, insertDataIntoTable, updateDataInTable } from '@/utils/supabasehelper';
+import { image } from 'html2canvas/dist/types/css/types/image';
 import { defineStore } from 'pinia';
 
 export function initState(): APIAI.Tasks {
   return {
   
-    name: '',
-    description: '',
+    accountId: "",
+    name: "",
+    typeUpload:"URL",
+    mediaType: "Video",
+    description: "",
     isActivate: true,
-
-  
+    dateTimeUpload:new Date(),
+    uploadTo: ["UploadAccount"],
+    url:"",
+    files:[""],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   }
@@ -16,9 +22,9 @@ export function initState(): APIAI.Tasks {
 
 const tableName = 'tasks';
 
-export const useTasksStore = defineStore('model-store', {
+export const useTasksStore = defineStore('tasks-store', {
   state: () => ({
-    listModels: [] as APIAI.ModelAI[],
+    listModels: [] as APIAI.Tasks[],
     modelInfo: initState(),
     loadingInit: false,
     showModelAdd: false,

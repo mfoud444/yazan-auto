@@ -37,10 +37,10 @@ onMounted(() => {
             <span></span>
             <span></span>
             <span></span> -->
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
+            <span class="span"></span>
+            <span class="span"></span>
+            <span class="span"></span>
+            <span class="span"></span>
       
   <NConfigProvider
     class="h-full"

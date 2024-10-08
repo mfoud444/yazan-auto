@@ -3,12 +3,41 @@ import { onMounted, ref } from 'vue'
 import { NCard, NGrid, NGridItem, NNumberAnimation, NSkeleton } from 'naive-ui'
 import { useDashboardStore } from '@/store'
 import { SvgIcon } from '@/components/common'
+import { useBasicLayout } from '@/hooks/useBasicLayout'
 import { t } from '@/locales';
+import { post, get } from '@/utils/request'
 const dashboardStore = useDashboardStore()
 const isLoading = ref(true)
-
+const { isMobile } = useBasicLayout()
+import {  fetchDataFromTable } from '@/utils/supabasehelper';
+const sessionId = ref("")
 onMounted(async () => {
-  await dashboardStore.fetchDashboardData()
+  const filters = { user_id: '1f8191ba-64ce-4617-b40a-f11dc1f231d8' };
+  const { data, totalCount } = await fetchDataFromTable("instagram_account", 1000, 0, filters);
+  console.log("data", data)
+  sessionId.value = data[0].sessionKey
+  console.log("sessionId.value", sessionId.value)
+  const payload = {
+        sessionid: sessionId.value,
+        username: "mfoud555"
+      };
+      
+      // Make a POST request
+      // const response = await post<any>({
+      //   url: '/user/info_by_username',
+      //   data: payload,
+      //   headers: {
+      //     'accept': 'application/json',
+      //     'Content-Type': 'application/x-www-form-urlencoded'
+      //   }
+      // });
+      // console.log("response", response);
+// } catch (error: any) {
+//     console.error('Error fetching data from ', error.message);
+//     throw error;
+//   }
+
+  // await dashboardStore.fetchDashboardData()
   isLoading.value = false
 })
 
@@ -27,7 +56,7 @@ const cardItems = [
 <template>
   <div class="p-4 mx-12 ">
     <h1 class="text-2xl font-bold mb-4 gtext">{{ t('common.Dashboard') }}</h1>
-    <NGrid :x-gap="12" :y-gap="12" :cols="2">
+    <NGrid :x-gap="12" :y-gap="12" :cols="isMobile ? 1 : 2">
       <NGridItem v-for="item in cardItems" :key="item.title">
         <NCard>
           <div class="flex  items-center justify-between">
