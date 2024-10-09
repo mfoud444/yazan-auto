@@ -32,12 +32,12 @@ import { MainHeader } from '@/components/common';
       </div>
     </div>
     <div style="background: #bb9ce6;background: -webkit-linear-gradient(151deg, #bb9ce6 0%, #ddd4e9 100%);background: linear-gradient(151deg, #bb9ce6 0%, #ddd4e9 100%);"></div>
-  <div class="container pb-1 dark:bg-violet-950">
+  <div class=" mx-2 md:mx-12 pb-1 dark:bg-violet-950">
     <div class="sticky top-0 z-50">
      <MainHeader/>
       <!-- <Navbar /> -->
     </div>
-      <main class="relative flex flex-col gap-4 dark:bg-gray-950">
+      <main class="relative w-full flex flex-col gap-4 dark:bg-gray-950">
        
         <Hero/>
         <!-- <Company/> -->

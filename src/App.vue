@@ -32,7 +32,7 @@ onMounted(() => {
 </script>
 
 <template>
-        <div class="background">
+        <div class="background ">
             <!-- <span></span>
             <span></span>
             <span></span>
