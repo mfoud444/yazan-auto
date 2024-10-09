@@ -6,6 +6,7 @@ export interface SettingsState {
   systemMessage: string
   temperature: number
   top_p: number
+  stateDashboard:APIAI.stateDashboard
   isEmojis?:boolean
   settings?:PublicApp.AppSetting
   privacyPolicyEn:string
@@ -17,6 +18,7 @@ export function defaultSetting(): SettingsState {
     systemMessage: '',
     temperature: 0.8,
     top_p: 1,
+    stateDashboard:"List",
     isEmojis:false,
     privacyPolicyEn:'',
     privacyPolicyAr:''

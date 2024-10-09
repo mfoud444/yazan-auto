@@ -142,13 +142,13 @@ const menuOptions: MenuOption[] = [
         icon: iconRender({ icon: 'hugeicons:ai-network' }),
 
       },
-      {
-        label: t('common.modelsai'),
-        key: 'modelsai',
+      // {
+      //   label: t('common.modelsai'),
+      //   key: 'modelsai',
 
-        icon: iconRender({ icon: 'arcticons:ask-ai' }),
+      //   icon: iconRender({ icon: 'arcticons:ask-ai' }),
 
-      },
+      // },
       {
         label: t('common.tasks'),
         key: 'tasks',
@@ -185,18 +185,18 @@ const menuOptions: MenuOption[] = [
   //   ],
   // },
 
-  {
-    type: 'group',
-    label: t('common.chatsManager'),
-    key: 'chats-user-ai',
+  // {
+  //   type: 'group',
+  //   label: t('common.chatsManager'),
+  //   key: 'chats-user-ai',
 
-    children: [
-      {
-        label: t('common.chatsUser'),
-        key: 'chat',
-        icon: iconRender({ icon: 'bx:chat' }),
+  //   children: [
+  //     {
+  //       label: t('common.chatsUser'),
+  //       key: 'chat',
+  //       icon: iconRender({ icon: 'bx:chat' }),
 
-      },
+  //     },
 
       // {
       //   label: t('common.chatsUserAgri'),
@@ -206,8 +206,8 @@ const menuOptions: MenuOption[] = [
       // },
 
 
-    ],
-  },
+  //   ],
+  // },
 
   // {
   //   type: 'group',
@@ -239,13 +239,13 @@ const menuOptions: MenuOption[] = [
     key: 'settings',
 
     children: [
-      {
-        label: t('common.settingsAPP'),
-        key: 'settingsapp',
-        icon: iconRender({ icon: 'mdi:settings-outline' }),
+      // {
+      //   label: t('common.settingsAPP'),
+      //   key: 'settingsapp',
+      //   icon: iconRender({ icon: 'mdi:settings-outline' }),
       
 
-      },
+      // },
       // {
       //   label: t('common.editTermsOfUse'),
       //   key: 'edit-terms-of-use',

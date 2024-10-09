@@ -35,6 +35,7 @@ export const useModelStore = defineStore('model-store', {
     loadingInit: false,
     showModelAdd: false,
     showModelUpdate: false,
+    showModelList: true,
     countTotalData: 0
   }),
   actions: {

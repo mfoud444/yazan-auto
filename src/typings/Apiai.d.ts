@@ -1,5 +1,5 @@
 declare namespace APIAI {
-
+ type stateDashboard = 'Add' | 'Edit' | 'List'
     type UploadedTo = 'UploadStory' | 'UploadAccount' 
     type MediaType = 'Image' | 'Video' | 'Elbom'
     type TypeUpload = 'URL' | 'Media'
@@ -28,7 +28,7 @@ declare namespace APIAI {
       createdAt: string; 
       updatedAt: string; 
       uploadTo: UploadedTo[];
-      url?:string
+      url?:string[]
       files:strings[]
     }
   

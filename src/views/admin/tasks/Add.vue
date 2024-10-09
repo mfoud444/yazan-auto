@@ -1,19 +1,20 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
-import { NForm, NInput, NButton,NUpload, NDatePicker, FormInst, FormRules, NSwitch, NGrid, NFormItemGi, NSelect, NInputNumber, useMessage } from 'naive-ui';
+import { NForm, NInput, NButton,NUpload, NDatePicker, FormInst, FormRules, NSwitch, NGrid, NFormItemGi, NSelect, NInputNumber, UploadCustomRequestOptions, useMessage } from 'naive-ui';
 import { t } from '@/locales';
 import { useTasksStore, useCompanyStore } from '@/store';
 import { useBasicLayout } from '@/hooks/useBasicLayout';
 import { getImageUrl } from '@/utils/supabasehelper';
 import { get, post, put } from '@/utils/request'
+import { supabase } from '@/utils/supabase';
 const { isMobile } = useBasicLayout();
-const span = computed(() => (isMobile ? 24 : 12));
-const modelStore = useTasksStore();
+const span = computed(() => (isMobile ? 24 : 24));
+const store = useTasksStore();
 const companyStore = useCompanyStore();
 const message = useMessage();
 const formRef = ref<FormInst | null>(null);
 const loading = ref(false);
-const model = ref<APIAI.Tasks>(modelStore.initState());
+const model = ref<APIAI.Tasks>(store.initState());
 const rules: FormRules = {
   // name: [{ required: true, message: t('common.nameRequired'), trigger: ['input', 'blur'] }],
 };
@@ -56,7 +57,7 @@ async function fetchData(): Promise<void> {
   try {
     await companyStore.fetchDataAction({ limit: 1000, offset: 0 });
 
-    companyStore.listCompanies = await Promise.all(companyStore.listCompanies.map(async (company) => {
+    companyStore.list = await Promise.all(companyStore.listCompanies.map(async (company) => {
       if (company.logoUrl) {
         try {
           company.logoUrl = await getImageUrl(companyStore.bucket, company.logoUrl);
@@ -83,7 +84,8 @@ onMounted(fetchData);
 async function handleAddData() {
   try {
     loading.value = true;
-    // await modelStore.insertDataAction(model.value);
+    console.log(model.value.url)
+    await store.insertDataAction(model.value);
     const sesssionId = companyStore.listCompanies.find(company => company.id === model.value.accountId)?.sessionKey
     console.log("sesssionId", sesssionId)
     const payload = {
@@ -101,7 +103,7 @@ async function handleAddData() {
       });
       console.log("response", response)
     loading.value = false;
-    modelStore.showModelAdd = false;
+    store.showModelAdd = false;
     message.success(t('common.addSuccess'));
   } catch (error: any) {
     loading.value = false;
@@ -229,7 +231,7 @@ const customRequest = async ({ file, data: dataParams, onFinish, onError, onProg
 
           <NFormItemGi v-if="model.typeUpload === 'URL'" :span="span" path="url" :label="t('common.URL')">
             <NInput
-              v-model:value="model.url"
+              v-model:value="model.url[0]"
                 :input-props="{ type: 'url' }"
               @keyup.enter="handleValidateButtonClick"
               :placeholder="t('common.URL')"

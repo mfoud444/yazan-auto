@@ -1,5 +1,5 @@
 import { deleteDataFromTable, fetchDataFromTable, insertDataIntoTable, updateDataInTable } from '@/utils/supabasehelper';
-import { image } from 'html2canvas/dist/types/css/types/image';
+
 import { defineStore } from 'pinia';
 
 export function initState(): APIAI.Tasks {
@@ -13,8 +13,8 @@ export function initState(): APIAI.Tasks {
     isActivate: true,
     dateTimeUpload:new Date(),
     uploadTo: ["UploadAccount"],
-    url:"",
-    files:[""],
+    url:[],
+    files:[],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   }
@@ -24,11 +24,12 @@ const tableName = 'tasks';
 
 export const useTasksStore = defineStore('tasks-store', {
   state: () => ({
-    listModels: [] as APIAI.Tasks[],
+    list: [] as APIAI.Tasks[],
     modelInfo: initState(),
     loadingInit: false,
     showModelAdd: false,
     showModelUpdate: false,
+    stateDashboard:'List',
     countTotalData: 0
   }),
   actions: {
@@ -39,7 +40,7 @@ export const useTasksStore = defineStore('tasks-store', {
     async fetchDataAction({ limit, offset }: { limit: number; offset: number }): Promise<void> {
       try {
         const { data, totalCount } = await fetchDataFromTable<APIAI.Tasks>(tableName, limit, offset);
-        this.listModels = data;
+        this.list = data;
         this.countTotalData = totalCount;
       } catch (error: any) {
         console.error('Error fetching models:', error.message);

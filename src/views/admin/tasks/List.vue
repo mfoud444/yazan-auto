@@ -6,7 +6,7 @@ import {
   NA, NText, NSwitch, NAvatar,
   DataTableRowKey
 } from 'naive-ui';
-import { useModelStore } from '@/store';
+import { useTasksStore } from '@/store';
 import { t } from '@/locales';
 import { useIconRender } from '@/hooks/useIconRender';
 import { useBasicLayout } from '@/hooks/useBasicLayout';
@@ -21,61 +21,61 @@ const loadingActionDelete = ref(false);
 const loadingActionEdit = ref(false);
 const loading = ref(true);
 const error_get = ref<boolean>(false);
-const modelStore = useModelStore();
+const store = useTasksStore();
 
 const checkedRowKeysRef = ref<Array<string | number>>([]);
 const { isMobile } = useBasicLayout();
 const dialog = useDialog();
 const message = useMessage();
-const rowEdit = ref<APIAI.ModelAI | null>(null);
+const rowEdit = ref<APIAI.Tasks | null>(null);
 
 // Compute the data for the current page
 const data = computed(() => {
   const start = (pagination.page - 1) * pagination.pageSize;
   const end = start + pagination.pageSize;
-  return modelStore.listModels.slice(start, end);
+  return store.list.slice(start, end);
 });
 
 const pageSize = ref(10);
-const itemCount = computed(() => modelStore.countTotalData);
+const itemCount = computed(() => store.countTotalData);
 const pagination = reactive({
   page: 1,
   pageCount: computed(() => Math.ceil(itemCount.value / pageSize.value)),
   pageSize: pageSize.value,
 });
 
-async function handleUpdate(row: APIAI.ModelAI) {
-  modelStore.showModelUpdate = true;
+async function handleUpdate(row: APIAI.Tasks) {
+  store.showModelUpdate = true;
   rowEdit.value = row;
 }
 
-const cardColumn = reactive<DataTableBaseColumn<APIAI.ModelAI>>({
+const cardColumn = reactive<DataTableBaseColumn<APIAI.Tasks>>({
   title: t('common.company'),
   key: 'company',
-  render(row: APIAI.ModelAI) {
+  render(row: APIAI.Tasks) {
     return h(
       Card,
       {
-        companyId: row.companyId
+        id: row.id
       },
     )
   },
 })
-const mainColumns = reactive<DataTableBaseColumn<APIAI.ModelAI>[]>([
+const mainColumns = reactive<DataTableBaseColumn<APIAI.Tasks>[]>([
   {
     title: t('common.name'),
     key: 'name',
     align: 'center',
-    render(row: APIAI.ModelAI) {
+    render(row: APIAI.Tasks) {
       return h(NText, { strong: true }, { default: () => row.name });
     }
   },
   {
-    title: t('common.modelCode'),
+    title: t('common.name'),
     key: 'modelCode',
     align: 'center',
-    render(row: APIAI.ModelAI) {
-      return h(NText, { type: 'info' }, { default: () => row.modelCode });
+    render(row: APIAI.Tasks) {
+      return h(NText, { type: 'info' }, { default: () => row.name });
     },
     ellipsis: true
   },
@@ -84,7 +84,7 @@ const mainColumns = reactive<DataTableBaseColumn<APIAI.ModelAI>[]>([
     title: t('common.description'),
     key: 'description',
     align: 'center',
-    render(row: APIAI.ModelAI) {
+    render(row: APIAI.Tasks) {
       return h(NText, {}, { default: () => row.description || 'N/A' });
     },
     ellipsis: true
@@ -93,8 +93,8 @@ const mainColumns = reactive<DataTableBaseColumn<APIAI.ModelAI>[]>([
     title: t('common.version'),
     key: 'version',
     align: 'center',
-    render(row: APIAI.ModelAI) {
-      return h(NText, {}, { default: () => row.version || 'N/A' });
+    render(row: APIAI.Tasks) {
+      return h(NText, {}, { default: () => row.dateTimeUpload || 'N/A' });
     },
     ellipsis: true
   },
@@ -102,7 +102,7 @@ const mainColumns = reactive<DataTableBaseColumn<APIAI.ModelAI>[]>([
     title: t('common.isActivate'),
     key: 'isActivate',
     align: 'center',
-    render(row: APIAI.ModelAI) {
+    render(row: APIAI.Tasks) {
       return h(NSwitch, { value: row.isActivate, disabled: true });
     }
   },
@@ -110,7 +110,7 @@ const mainColumns = reactive<DataTableBaseColumn<APIAI.ModelAI>[]>([
     title: t('common.createdAt'),
     key: 'createdAt',
     align: 'center',
-    render(row: APIAI.ModelAI) {
+    render(row: APIAI.Tasks) {
       return h(NText, {}, { default: () => new Date(row.createdAt).toLocaleString() });
     }
   },
@@ -118,14 +118,14 @@ const mainColumns = reactive<DataTableBaseColumn<APIAI.ModelAI>[]>([
     title: t('common.updatedAt'),
     key: 'updatedAt',
     align: 'center',
-    render(row: APIAI.ModelAI) {
+    render(row: APIAI.Tasks) {
       return h(NText, {}, { default: () => new Date(row.updatedAt).toLocaleString() });
     }
   }
 ]);
 
 
-const columns = reactive<DataTableColumns<APIAI.ModelAI>>([
+const columns = reactive<DataTableColumns<APIAI.Tasks>>([
   {
     type: 'selection',
   },
@@ -137,7 +137,7 @@ const columns = reactive<DataTableColumns<APIAI.ModelAI>>([
     key: 'actions',
     align: 'center',
     width: 100,
-    render(row: APIAI.ModelAI) {
+    render(row: APIAI.Tasks) {
       return h(
         'div',
         { class: 'flex gap-1' },
@@ -188,7 +188,7 @@ async function fetchData(): Promise<void> {
   try {
     loading.value = true;
     const { page, pageSize } = pagination;
-    await modelStore.fetchDataAction({ limit: pageSize, offset: (page - 1) * pageSize });
+    await store.fetchDataAction({ limit: pageSize, offset: (page - 1) * pageSize });
    
   } catch (error: any) {
     error_get.value = true;
@@ -200,10 +200,11 @@ async function fetchData(): Promise<void> {
 
 onMounted(async () => {
   await fetchData();
+  console.log("data", data.value)
 });
-const rowKey = (row: APIAI.ModelAI) => row.id!;
+const rowKey = (row: APIAI.Tasks) => row.id!;
 
-function handleDeleteAction(row: APIAI.ModelAI) {
+function handleDeleteAction(row: APIAI.Tasks) {
   const deleteDialog = dialog.warning({
     title: t('common.deleteConfirmation'),
     content: t('common.deleteConfirmationMessage'),
@@ -212,13 +213,13 @@ function handleDeleteAction(row: APIAI.ModelAI) {
     onPositiveClick: async () => {
       try {
         deleteDialog.loading = true;
-        await modelStore.deleteDataAction(row.id);
+        await store.deleteDataAction(row.id);
         message.success(t('common.deleteSuccess'));
 
         // Check if the current page is empty after deletion
         const start = (pagination.page - 1) * pagination.pageSize;
         const end = start + pagination.pageSize;
-        const currentPageData = modelStore.listModels.slice(start, end);
+        const currentPageData = store.listModels.slice(start, end);
 
         // If current page is empty and it is not the first page, navigate to the previous page
         if (currentPageData.length === 0 && pagination.page > 1) {
@@ -256,7 +257,7 @@ function deleteSelectedRows() {
         deleteDialog.loading = true;
 
         // Convert IDs to string if necessary
-        const deletePromises = checkedRowKeysRef.value.map(id => modelStore.deleteDataAction(String(id)));
+        const deletePromises = checkedRowKeysRef.value.map(id => store.deleteDataAction(String(id)));
         await Promise.all(deletePromises);
         message.success(t('common.deleteSuccess'));
 
@@ -265,7 +266,7 @@ function deleteSelectedRows() {
 
         const start = (pagination.page - 1) * pagination.pageSize;
         const end = start + pagination.pageSize;
-        const currentPageData = modelStore.listModels.slice(start, end);
+        const currentPageData = store.listModels.slice(start, end);
 
         // Navigate to the previous page if current page is empty
         if (currentPageData.length === 0 && pagination.page > 1) {
@@ -286,28 +287,33 @@ function deleteSelectedRows() {
 </script>
 
 <template>
-  <div class="container_dashboard">
+  <div class="container_dashboard w-full">
     <div class="header_dashboard">
       {{ t('common.models') }}
     </div>
+
     <div>
-      <div class="flex gap-2 justify-end items-center my-2 mt-8">
-        <NSpace vertical>
-          <NSpace justify="space-between">
+
+      <div class="flex mr-8 gap-2 justify-end items-center my-2 mt-8">
+        <NSpace class="w-full" vertical>
+          <div class=" flex gap-4 items-start justify-end">
+      
             <NButton
-              @click="modelStore.showModelAdd = true"
+              @click="store.stateDashboard = 'List'"
+                v-if=" store.stateDashboard != 'List'"
               type="primary"
             >
               <div class="flex gap-2 items-center">
                 <SvgIcon
-                  icon="mdi:add-bold"
+                  icon="back"
                   class=" text-base"
                 />
-                <div class="hidden md:block">{{ t('common.add') }}</div>
+                <div class="hidden md:block">{{ t('common.back') }}</div>
               </div>
             </NButton>
 
             <NButton
+            v-if=" store.stateDashboard == 'List'"
               strong
               secondary
               type="error"
@@ -322,8 +328,31 @@ function deleteSelectedRows() {
                 <div class="hidden md:block">{{ t('common.delete') }}</div>
               </div>
             </NButton>
-          </NSpace>
-          <NDataTable
+
+
+       
+
+            <NButton
+              @click="store.stateDashboard = 'Add'"
+              type="primary"
+            >
+              <div class="flex gap-2 items-center">
+                <SvgIcon
+                  icon="mdi:add-bold"
+                  class=" text-base"
+                />
+                <div class="hidden md:block">{{ t('common.add') }}</div>
+              </div>
+            </NButton>
+          </div>
+      
+
+           <main v-if=" store.stateDashboard == 'List'">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-4">
+  <Card v-for="item in store.list" :key="item.id" :id="item.id" />
+</div>
+
+          <!-- <NDataTable
             remote
            :min-height="isMobile ? 380 : 540"
             :max-height="isMobile ? 400 : 700"
@@ -338,8 +367,8 @@ function deleteSelectedRows() {
             v-if="!error_get"
             :row-key="rowKey"
             @update:checked-row-keys="handleCheck"
-          />
-          <div     v-else  class="w-full">
+          /> 
+          <div     v-else  class="w-full bg-red-100 min-w-full">
           <NResult
          
           
@@ -353,25 +382,13 @@ function deleteSelectedRows() {
               </NButton>
             </template>
           </NResult>
-        </div>
-          <NModal
-            v-model:show="modelStore.showModelAdd"
-            :mask-closable="false"
-            :auto-focus="false"
-            preset="card"
-            style="width: 95%; max-width: 800px;"
-          >
-            <Add />
-          </NModal>
-          <NModal
-            v-model:show="modelStore.showModelUpdate"
-            :mask-closable="false"
-            :auto-focus="false"
-            preset="card"
-            style="width: 95%; max-width: 800px;"
-          >
-            <Update :item="rowEdit!" />
-          </NModal>
+        </div> -->
+      </main>
+
+            <Add v-if=" store.stateDashboard === 'Add'" />
+       
+            <Update   v-if=" store.stateDashboard == 'Edit'" :item="rowEdit!" />
+     
         </NSpace>
       </div>
     </div>

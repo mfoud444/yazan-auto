@@ -214,7 +214,21 @@ CREATE TRIGGER update_ai_company_timestamp BEFORE UPDATE ON public.instagram_acc
 
 
 
-
+   interface Tasks {
+      id?: string; 
+      accountId: string; 
+      name: string;
+      typeUpload:TypeUpload
+      mediaType: MediaType;
+      description?: string; 
+      isActivate: boolean;
+      dateTimeUpload:DateTime;
+      createdAt: string; 
+      updatedAt: string; 
+      uploadTo: UploadedTo[];
+      url?:string[]
+      files:strings[]
+    }
 
 
 
