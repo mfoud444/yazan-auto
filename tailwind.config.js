@@ -7,6 +7,14 @@ module.exports = {
   ],
   theme: {
     extend: {
+      colors: {
+        instagram: {
+            pink: '#d6249f',
+            purple: '#285AEB',
+            orange: '#FD1D1D',
+            yellow: '#FCAF45'
+        }
+    },
       animation: {
         blink: 'blink 1.2s infinite steps(1, start)',
       },

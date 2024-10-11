@@ -82,12 +82,12 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="dark:bg-gray-950 dark:text-white flex py-24  w-full overflow-hidden h-[550px] rounded-lg gap-22 relative">
+  <div class="dark:bg-gray-950 dark:text-white flex pt-24  w-full   rounded-lg gap-22 relative">
     <!-- Vanta Container for visual effects -->
-    <div ref="vantaContainer" class="min-h-[85vh] top-0 absolute w-full h-full z-0"></div>
+    <div ref="vantaContainer" class=" rounded-lg top-0 min-h-[50vh]  absolute w-full h-full z-0"></div>
     
     <!-- Content overlaid on the Vanta container -->
-    <div class="flex flex-col  md:gap-8  z-46 justify-end items-center relative">
+    <div class="flex flex-col  md:gap-8 z-50 -bottom-0 justify-end items-center relative">
       <!-- App Name with dynamic classes -->
       <div
         class="first-letter:font-bold   first-letter:font-serif font-bold gtexth first-letter:text-blue-700"
@@ -101,6 +101,14 @@ onBeforeUnmount(() => {
         {{ t('app.descApp') }}
       </div>
       
+          <!-- Hero Section -->
+    <!-- <section class="bg-gradient-to-r from-instagram-purple via-instagram-pink to-instagram-orange text-white py-20">
+        <div class="container mx-auto text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4">Automate Your Instagram Growth</h1>
+            <p class="text-xl mb-8">Boost your followers, engagement, and sales with our powerful automation tools</p>
+            <a href="#" class="bg-white text-instagram-pink font-bold py-2 px-4 rounded-full hover:bg-instagram-yellow hover:text-white transition duration-300">Get Started</a>
+        </div>
+    </section> -->
       <!-- Button -->
       <button
         class="btn btn-primary font-bold text-2xl w-56"
