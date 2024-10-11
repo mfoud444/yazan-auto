@@ -1,5 +1,5 @@
 <template>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-2  gap-4">
       <NCard v-for="company in companies" :key="company.id" class="flex flex-col bg-gradient-to-b from-blue-100 via-orange-100 to-orange-100">
         <template #header>
           <div class="flex items-center justify-between">
