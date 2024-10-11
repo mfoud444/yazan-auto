@@ -6,7 +6,7 @@ import { useCompanyStore } from '@/store';
 import { supabase } from '@/utils/supabase';
 import { useBasicLayout } from '@/hooks/useBasicLayout';
 
-export function useCompanyForm(model: Ref<APIAI.CompanyAI>) {
+export function useCompanyForm(model: Ref<APIAI.AccountsInstagram>) {
   const { isMobile } = useBasicLayout();
   const span = computed(() => (isMobile ? 24 : 12));
 
@@ -17,8 +17,8 @@ export function useCompanyForm(model: Ref<APIAI.CompanyAI>) {
 
   const rules: FormRules = {
     name: [{ required: true, message: t('common.nameRequired'), trigger: ['input', 'blur'] }],
-    apiUrl: [{ required: true, message: t('common.apiUrlRequired'), trigger: ['input', 'blur'] }],
-    apiKey: [{ required: true, message: t('common.apiKeyRequired'), trigger: ['input', 'blur'] }]
+    username: [{ required: true, message: t('common.apiUrlRequired'), trigger: ['input', 'blur'] }],
+    sessionId: [{ required: true, message: t('common.apiKeyRequired'), trigger: ['input', 'blur'] }]
   };
 
   const customRequest = async ({ file, data: dataParams, onFinish, onError, onProgress }: UploadCustomRequestOptions) => {
@@ -57,7 +57,7 @@ export function useCompanyForm(model: Ref<APIAI.CompanyAI>) {
   };
 
   function isButtonDisabled() {
-    return !model.value.name || !model.value.apiUrl || !model.value.apiKey || loading.value;
+    return !model.value.name || !model.value.username || !model.value.sessionId || loading.value;
   }
 
   function handleValidateButtonClick(e: MouseEvent, handleSubmit: () => Promise<void>) {

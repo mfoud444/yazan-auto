@@ -5,16 +5,16 @@ import {
   useDialog, NResult,
   DataTableRowKey, NModal,
   useMessage, DataTableColumns,
-  NA,
   NText,
   NSwitch,
   NAvatar,
 } from 'naive-ui'
+import CompanyCardGrid from './CompanyCardGrid.vue'
 import { useCompanyStore } from '@/store'
 import { t } from '@/locales';
 import { useIconRender } from '@/hooks/useIconRender'
 import { useBasicLayout } from '@/hooks/useBasicLayout';
-import { SvgIcon } from '@/components/common';
+import { SvgIcon, LoadingIcon } from '@/components/common';
 import Add from './Add.vue'
 import Update from './Update.vue'
 import { getImageUrl } from '@/utils/supabasehelper';
@@ -28,7 +28,7 @@ const checkedRowKeysRef = ref<Array<string | number>>([])
 const { isMobile } = useBasicLayout()
 const dialog = useDialog()
 const message = useMessage();
-const rowEdit = ref<APIAI.CompanyAI | null>(null);
+const rowEdit = ref<APIAI.AccountsInstagram | null>(null);
 // Compute the data for the current page
 const data = computed(() => {
   const start = (pagination.page - 1) * pagination.pageSize;
@@ -46,35 +46,26 @@ const pagination = reactive({
 
 
 
-async function handleUpdate(row: APIAI.CompanyAI) {
+async function handleUpdate(row: APIAI.AccountsInstagram) {
   companyStore.showModelUpdate = true;
   rowEdit.value = row;
 }
 
 
-const mainColumns = reactive<DataTableBaseColumn<APIAI.CompanyAI>[]>([
+const mainColumns = reactive<DataTableBaseColumn<APIAI.AccountsInstagram>[]>([
   {
     title: t('common.name'),
     key: 'name',
     align: 'center',
-    render(row: APIAI.CompanyAI) {
+    render(row: APIAI.AccountsInstagram) {
       return h(NText, { strong: true }, { default: () => row.name });
     },
-  },
-  {
-    title: t('common.companyUrl'),
-    key: 'companyUrl',
-    align: 'center',
-    render(row: APIAI.CompanyAI) {
-      return row.companyUrl ? h(NA, { href: row.companyUrl, target: '_blank' }, { default: () => row.companyUrl }) : null;
-    },
-    ellipsis: true
   },
   {
     title: t('common.logoUrl'),
     key: 'logoUrl',
     align: 'center',
-    render(row: APIAI.CompanyAI) {
+    render(row: APIAI.AccountsInstagram) {
       const hasLogoUrl = row.logoUrl !== null && row.logoUrl !== undefined && row.logoUrl.trim() !== '';
 
       const defaultIcon = h(SvgIcon, {
@@ -93,20 +84,20 @@ const mainColumns = reactive<DataTableBaseColumn<APIAI.CompanyAI>[]>([
     ellipsis: true
   },
   {
-    title: t('common.apiUrl'),
-    key: 'apiUrl',
+    title: t('common.username'),
+    key: 'username',
     align: 'center',
-    render(row: APIAI.CompanyAI) {
-      return h(NText, { type: 'info' }, { default: () => row.apiUrl });
+    render(row: APIAI.AccountsInstagram) {
+      return h(NText, { type: 'info' }, { default: () => row.username });
     },
     ellipsis: true
   },
   {
-    title: t('common.apiKey'),
-    key: 'apiKey',
+    title: t('common.sessionId'),
+    key: 'sessionId',
     align: 'center',
-    render(row: APIAI.CompanyAI) {
-      return h(NText, { type: 'info' }, { default: () => row.apiKey });
+    render(row: APIAI.AccountsInstagram) {
+      return h(NText, { type: 'info' }, { default: () => row.sessionId });
     },
     ellipsis: true
   },
@@ -114,7 +105,7 @@ const mainColumns = reactive<DataTableBaseColumn<APIAI.CompanyAI>[]>([
     title: t('common.isActivate'),
     key: 'isActivate',
     align: 'center',
-    render(row: APIAI.CompanyAI) {
+    render(row: APIAI.AccountsInstagram) {
       return h(NSwitch, { value: row.isActivate, disabled: true });
     }
   },
@@ -122,7 +113,7 @@ const mainColumns = reactive<DataTableBaseColumn<APIAI.CompanyAI>[]>([
     title: t('common.createdAt'),
     key: 'createdAt',
     align: 'center',
-    render(row: APIAI.CompanyAI) {
+    render(row: APIAI.AccountsInstagram) {
       return h(NText, {}, { default: () => new Date(row.createdAt).toLocaleString() });
     }
   },
@@ -130,14 +121,14 @@ const mainColumns = reactive<DataTableBaseColumn<APIAI.CompanyAI>[]>([
     title: t('common.updatedAt'),
     key: 'updatedAt',
     align: 'center',
-    render(row: APIAI.CompanyAI) {
+    render(row: APIAI.AccountsInstagram) {
       return h(NText, {}, { default: () => new Date(row.updatedAt).toLocaleString() });
     }
   }
 ]);
 
 
-const columns = reactive<DataTableColumns<APIAI.CompanyAI>>([
+const columns = reactive<DataTableColumns<APIAI.AccountsInstagram>>([
   {
     type: 'selection',
   },
@@ -146,7 +137,7 @@ const columns = reactive<DataTableColumns<APIAI.CompanyAI>>([
     title: t('common.actions'),
     key: 'actions',
     align: 'center',
-    render(row: APIAI.CompanyAI) {
+    render(row: APIAI.AccountsInstagram) {
       return h(
         'div',
         {
@@ -233,7 +224,7 @@ onMounted(async () => {
 })
 
 
-function handleDeleteAction(row: APIAI.CompanyAI) {
+function handleDeleteAction(row: APIAI.AccountsInstagram) {
   const deleteDialog = dialog.warning({
     title: t('common.deleteConfirmation'),
     content: t('common.deleteConfirmationMessage'),
@@ -267,7 +258,7 @@ function handleDeleteAction(row: APIAI.CompanyAI) {
     },
   });
 }
-const rowKey = (row: APIAI.CompanyAI) => row.id!;
+const rowKey = (row: APIAI.AccountsInstagram) => row.id!;
 
 function handleCheck(rowKeys: DataTableRowKey[]) {
   checkedRowKeysRef.value = rowKeys
@@ -325,18 +316,25 @@ function handlePageChange(currentPage: number) {
   pagination.page = currentPage;
   fetchData();
 }
+
+const handleRelogin = (company: APIAI.AccountsInstagram) => {
+  // Handle the relogin action here
+  console.log('Relogin company:', company)
+  // You might want to call a function to refresh the login session
+  // refreshLoginSession(company.id)
+}
 </script>
 
 <template>
   <div class="container_dashboard">
 
     <div class="header_dashboard">
-      {{ t('common.companes') }}
+      {{ t('common.accountsInstagram') }}
     </div>
     <div>
-      <div class="flex gap-2 justify-end items-center my-2 mt-8">
-        <NSpace vertical>
-          <NSpace justify="space-between">
+      <div class="flex w-full gap-2 justify-end items-center  my-8">
+        <NSpace class="w-full mb-8" vertical>
+          <div class=" flex gap-4 items-start justify-end">
 
             <NButton
               @click="companyStore.showModelAdd = true"
@@ -351,7 +349,7 @@ function handlePageChange(currentPage: number) {
               </div>
             </NButton>
 
-            <NButton
+            <!-- <NButton
               strong
               secondary
               type="error"
@@ -366,9 +364,33 @@ function handlePageChange(currentPage: number) {
                 <div class="hidden md:block">{{ t('common.delete') }}</div>
               </div>
 
-            </NButton>
-          </NSpace>
-          <NDataTable
+            </NButton> -->
+          </div>
+
+       
+          <div v-if="loading" class=" flex h-full w-full items-center justify-center">
+              <LoadingIcon  />
+            </div>
+          <CompanyCardGrid 
+          :companies="data"
+            @edit="handleUpdate"
+             v-if="!error_get && !loading"
+                @delete="handleDeleteAction"
+    @relogin="handleRelogin"
+             />
+          <NResult
+          v-if="error_get"
+            status="warning"
+            title="Error"
+            description="Error fetching data."
+          >
+            <template #footer>
+              <NButton @click="fetchData">
+                {{ t('common.tryAgain') }}
+              </NButton>
+            </template>
+          </NResult>
+          <!-- <NDataTable
             remote
        
        
@@ -386,7 +408,7 @@ function handlePageChange(currentPage: number) {
             v-if="!error_get"
             :row-key="rowKey"
             @update:checked-row-keys="handleCheck"
-          />
+          /> 
           <NResult
             v-else
             status="warning"
@@ -399,12 +421,13 @@ function handlePageChange(currentPage: number) {
               </NButton>
             </template>
           </NResult>
+          -->
           <NModal
             v-model:show="companyStore.showModelAdd"
             :mask-closable=false
             :auto-focus="false"
             preset="card"
-            style="width: 95%; max-width: 800px;"
+            style="width: 95%; margin-top: 20px; margin-bottom: 20px;  max-width: 800px;"
           >
             <Add/>
           </NModal>
@@ -413,7 +436,7 @@ function handlePageChange(currentPage: number) {
             :mask-closable=false
             :auto-focus="false"
             preset="card"
-            style="width: 95%; max-width: 800px;"
+               style="width: 95%; margin-top: 20px; margin-bottom: 20px;  max-width: 800px;"
           >
             <Update :item="rowEdit!" />
           </NModal>

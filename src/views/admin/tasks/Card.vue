@@ -13,7 +13,7 @@ interface Props {
 
 const props = defineProps<Props>()
 const store = useTasksStore();
-const row = ref<APIAI.CompanyAI | null>(null);
+const row = ref<APIAI.AccountsInstagram | null>(null);
 const loading = ref<boolean>(false);
 
 async function fetchData(): Promise<void> {

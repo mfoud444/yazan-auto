@@ -6,10 +6,10 @@ import { t } from '@/locales';
 import { useCompanyStore } from '@/store';
 import { useCompanyForm } from './useCompanyForm';
 
-const props = defineProps<{ item: APIAI.CompanyAI }>();
+const props = defineProps<{ item: APIAI.AccountsInstagram }>();
 const companyStore = useCompanyStore();
-const model = ref<APIAI.CompanyAI>({ ...props.item });
-const originalModel = ref<APIAI.CompanyAI>({ ...props.item });
+const model = ref<APIAI.AccountsInstagram>({ ...props.item });
+const originalModel = ref<APIAI.AccountsInstagram>({ ...props.item });
 const message = useMessage();
 const { span, formRef, loading, rules, customRequest, isButtonDisabled, handleValidateButtonClick } = useCompanyForm(model);
 
@@ -23,7 +23,7 @@ const previewFileList = ref<UploadFileInfo[]>([
 ]);
 
 const isButtonDisabledComputed = computed(() => {
-  return loading.value || !model.value.name || !model.value.apiUrl || JSON.stringify(model.value) === JSON.stringify(originalModel.value);
+  return loading.value || !model.value.name || !model.value.username || JSON.stringify(model.value) === JSON.stringify(originalModel.value);
 });
 
 async function handleUpdateData() {
@@ -43,7 +43,6 @@ async function handleUpdateData() {
   }
 }
 </script>
-
 <template>
   <div class="border-none shadow-none flex flex-col gap-2 p-2 rounded-lg">
     <div class="post-heading mb-1">
@@ -57,8 +56,7 @@ async function handleUpdateData() {
     >
       <div>
         <NGrid
-          :span="span"
-          :x-gap="24"
+    
         >
           <NFormItemGi
             :span="span"
@@ -70,8 +68,8 @@ async function handleUpdateData() {
               list-type="image-card"
               :max="1"
               path="logoUrl"
-              :data="{ 'bucket': 'company' }"
-                :default-file-list="model.logoUrl ? previewFileList : []"
+              :data="{ 'bucket': 'accounts_instagram' }"
+              :default-file-list="model.logoUrl ? previewFileList : []"
               :custom-request="customRequest"
             />
           </NFormItemGi>
@@ -88,45 +86,39 @@ async function handleUpdateData() {
               @keydown.enter.prevent
             />
           </NFormItemGi>
+
+          <!-- Username -->
           <NFormItemGi
             :span="span"
-            path="companyUrl"
-            :label="t('common.companyUrl')"
+            path="username"
+            :label="t('common.username')"
           >
             <NInput
-              v-model:value="model.companyUrl"
+              v-model:value="model.username"
               @keyup.enter="handleValidateButtonClick($event, handleUpdateData)"
-              :placeholder="t('common.companyUrl')"
+              :placeholder="t('common.username')"
               clearable
               @keydown.enter.prevent
             />
           </NFormItemGi>
+
+          <!-- Session ID -->
           <NFormItemGi
             :span="span"
-            path="apiUrl"
-            :label="t('common.apiUrl')"
+            path="sessionId"
+            :label="t('common.sessionId')"
           >
             <NInput
-              v-model:value="model.apiUrl"
+              v-model:value="model.sessionId"
               @keyup.enter="handleValidateButtonClick($event, handleUpdateData)"
-              :placeholder="t('common.apiUrl')"
+              :placeholder="t('common.sessionId')"
               clearable
               @keydown.enter.prevent
             />
           </NFormItemGi>
-          <NFormItemGi
-            :span="span"
-            path="apiKey"
-            :label="t('common.apiKey')"
-          >
-            <NInput
-              v-model:value="model.apiKey"
-              @keyup.enter="handleValidateButtonClick($event, handleUpdateData)"
-              :placeholder="t('common.apiKey')"
-              clearable
-              @keydown.enter.prevent
-            />
-          </NFormItemGi>
+
+        
+
           <NFormItemGi
             :span="span"
             path="isActivate"

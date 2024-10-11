@@ -13,7 +13,7 @@ interface Props {
 
 const props = defineProps<Props>()
 const companyStore = useCompanyStore();
-const row = ref<APIAI.CompanyAI | null>(null);
+const row = ref<APIAI.AccountsInstagram | null>(null);
 const loading = ref<boolean>(false);
 
 async function fetchData(): Promise<void> {

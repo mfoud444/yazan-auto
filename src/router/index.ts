@@ -160,6 +160,13 @@ const routes: RouteRecordRaw[] = [
         meta: { requiresAuth: true },
       
       },
+
+      {
+        path: '/admin/downloads',
+        name: 'downloads',
+        component: () => import('@/views/admin/downloads/index.vue'),
+        meta: { requiresAuth: true },
+      },
       // {
       //   path: '/admin/chat',
       //   name: 'chat',

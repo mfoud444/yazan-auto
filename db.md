@@ -51,7 +51,6 @@ BEGIN
     first_name,
     last_name,
     avatar_url,
-
     state,
     gender,
     user_type,

@@ -7,7 +7,7 @@ import { useCompanyStore } from '@/store';
 import { useCompanyForm } from './useCompanyForm';
 
 const companyStore = useCompanyStore();
-const model = ref<APIAI.CompanyAI>(companyStore.initState());
+const model = ref<APIAI.AccountsInstagram>(companyStore.initState());
 const { span, formRef, loading, rules, customRequest, isButtonDisabled, handleValidateButtonClick } = useCompanyForm(model);
 const message = useMessage();
 async function handleAddData() {
@@ -39,8 +39,7 @@ async function handleAddData() {
     >
       <div>
         <NGrid
-          :span="span"
-          :x-gap="24"
+   
         >
           <NFormItemGi
             :span="span"
@@ -51,7 +50,7 @@ async function handleAddData() {
               accept="image/*"
               list-type="image-card"
               :max="1"
-              :data="{ 'bucket': 'company' }"
+              :data="{ 'bucket': 'accounts_instagram' }"
               path="logoUrl"
               :custom-request="customRequest"
             />
@@ -69,41 +68,33 @@ async function handleAddData() {
               @keydown.enter.prevent
             />
           </NFormItemGi>
-          <NFormItemGi
+
+
+              <!-- Username -->
+              <NFormItemGi
             :span="span"
-            path="companyUrl"
-            :label="t('common.companyUrl')"
+            path="username"
+            :label="t('common.username')"
           >
             <NInput
-              v-model:value="model.companyUrl"
+              v-model:value="model.username"
               @keyup.enter="handleValidateButtonClick($event, handleAddData)"
-              :placeholder="t('common.companyUrl')"
+              :placeholder="t('common.username')"
               clearable
               @keydown.enter.prevent
             />
           </NFormItemGi>
-          <NFormItemGi
+
+            <!-- Session ID -->
+            <NFormItemGi
             :span="span"
-            path="apiUrl"
-            :label="t('common.apiUrl')"
+            path="sessionId"
+            :label="t('common.sessionId')"
           >
             <NInput
-              v-model:value="model.apiUrl"
+              v-model:value="model.sessionId"
               @keyup.enter="handleValidateButtonClick($event, handleAddData)"
-              :placeholder="t('common.apiUrl')"
-              clearable
-              @keydown.enter.prevent
-            />
-          </NFormItemGi>
-          <NFormItemGi
-            :span="span"
-            path="apiKey"
-            :label="t('common.apiKey')"
-          >
-            <NInput
-              v-model:value="model.apiKey"
-              @keyup.enter="handleValidateButtonClick($event, handleAddData)"
-              :placeholder="t('common.apiKey')"
+              :placeholder="t('common.sessionId')"
               clearable
               @keydown.enter.prevent
             />

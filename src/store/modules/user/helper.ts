@@ -13,10 +13,11 @@ export interface UserInfo {
     dateOfBirth?: string; 
     state?: boolean;
     gender?: 'Male' | 'Female' | 'Other';
-    userType?: 'Client' | 'Agri-Expert' | 'Admin';
+    userType: 'Client' | 'Agri-Expert' | 'Admin';
     country?: string;
     createdAt?: string; 
     updatedAt?: string; 
+  accounts:APIAI.AccountsInstagram[]
 }
 
 export interface UserState {
@@ -31,7 +32,9 @@ export function defaultSetting(): UserState {
     user: null,
     avatar: '',
     fristName: 'Demo User',
+     userType: 'Client',
     description: 'Your Freedom',
+    accounts:[]
   }
   return {
     userInfo: defaultUserInfo,

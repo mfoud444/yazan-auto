@@ -5,7 +5,7 @@ import { t } from '@/locales';
 import { useTasksStore, useCompanyStore } from '@/store';
 import { useBasicLayout } from '@/hooks/useBasicLayout';
 import { getImageUrl } from '@/utils/supabasehelper';
-import { get, post, put } from '@/utils/request'
+import {  post } from '@/utils/request'
 import { supabase } from '@/utils/supabase';
 const { isMobile } = useBasicLayout();
 const span = computed(() => (isMobile ? 24 : 24));
@@ -175,7 +175,7 @@ const customRequest = async ({ file, data: dataParams, onFinish, onError, onProg
       size="large"
     >
       <div>
-        <NGrid :span="span" :x-gap="24">
+        <NGrid >
 
           
           <NFormItemGi :span="span" path="accountId" :label="t('common.selectAccount')">
@@ -229,12 +229,12 @@ const customRequest = async ({ file, data: dataParams, onFinish, onError, onProg
             />
           </NFormItemGi>
 
-          <NFormItemGi v-if="model.typeUpload === 'URL'" :span="span" path="url" :label="t('common.URL')">
+          <NFormItemGi v-if="model.typeUpload === 'URL'" :span="span" path="url" :label="t('common.url')">
             <NInput
               v-model:value="model.url[0]"
                 :input-props="{ type: 'url' }"
               @keyup.enter="handleValidateButtonClick"
-              :placeholder="t('common.URL')"
+              :placeholder="t('common.url')"
               clearable
               @keydown.enter.prevent
             />
@@ -267,7 +267,12 @@ const customRequest = async ({ file, data: dataParams, onFinish, onError, onProg
 
           <NFormItemGi :span="span" path="description" :label="t('common.description')">
             <NInput
-            type="textaria"
+            type="textarea"
+              size="small"
+              :autosize="{
+                minRows: 3,
+                maxRows: 5,
+              }"
               v-model:value="model.description"
               @keyup.enter="handleValidateButtonClick"
               :placeholder="t('common.description')"

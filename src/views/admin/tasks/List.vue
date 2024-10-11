@@ -10,7 +10,7 @@ import { useTasksStore } from '@/store';
 import { t } from '@/locales';
 import { useIconRender } from '@/hooks/useIconRender';
 import { useBasicLayout } from '@/hooks/useBasicLayout';
-import { SvgIcon } from '@/components/common';
+import { SvgIcon, LoadingIcon } from '@/components/common';
 import Add from './Add.vue';
 import Update from './Update.vue';
 import Card from './Card.vue'
@@ -287,15 +287,15 @@ function deleteSelectedRows() {
 </script>
 
 <template>
-  <div class="container_dashboard w-full">
+  <div class="container_dashboard w-full mb-10">
     <div class="header_dashboard">
-      {{ t('common.models') }}
+      {{ t('common.tasks') }}
     </div>
 
     <div>
 
       <div class="flex mr-8 gap-2 justify-end items-center my-2 mt-8">
-        <NSpace class="w-full" vertical>
+        <NSpace class="w-full mb-8" vertical>
           <div class=" flex gap-4 items-start justify-end">
       
             <NButton
@@ -305,7 +305,7 @@ function deleteSelectedRows() {
             >
               <div class="flex gap-2 items-center">
                 <SvgIcon
-                  icon="back"
+                  icon="lets-icons:back"
                   class=" text-base"
                 />
                 <div class="hidden md:block">{{ t('common.back') }}</div>
@@ -347,10 +347,26 @@ function deleteSelectedRows() {
           </div>
       
 
-           <main v-if=" store.stateDashboard == 'List'">
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  gap-4">
-  <Card v-for="item in store.list" :key="item.id" :id="item.id" />
-</div>
+          <main v-if="store.stateDashboard === 'List'">
+  <!-- Show loading spinner -->
+  <div v-if="loading" class="flex h-full items-center justify-center">
+    <LoadingIcon />
+  </div>
+
+  <!-- Show "not found" message if list is empty -->
+  <div v-else-if="store.list.length === 0" class="flex h-full items-center justify-center">
+    <div class="text-center flex flex-col h-full items-center justify-center">
+      <SvgIcon icon="mdi:alert-circle-outline" class="text-4xl text-gray-400" />
+      <p class="text-gray-500 mt-2">{{ t('common.notFound') }}</p>
+    </div>
+  </div>
+
+  <!-- Show list items if data is present -->
+  <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    <Card v-for="item in store.list" :key="item.id" :id="item.id" />
+  </div>
+
+
 
           <!-- <NDataTable
             remote

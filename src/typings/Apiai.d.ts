@@ -3,17 +3,17 @@ declare namespace APIAI {
     type UploadedTo = 'UploadStory' | 'UploadAccount' 
     type MediaType = 'Image' | 'Video' | 'Elbom'
     type TypeUpload = 'URL' | 'Media'
-    interface CompanyAI {
-      id?: string; // UUID
+    interface AccountsInstagram {
+      id?: string; 
       name: string;
-      apiUrl: string;
-      apiKey:string;
-      companyUrl?: string; // Optional
-      logoUrl?: string; // Optional
-      
+      user_id:string
+      username: string;
+      sessionId: string; 
+      logoUrl?: string; 
+      isLogin:boolean
       isActivate: boolean;
-      createdAt: string; // Timestamp
-      updatedAt: string; // Timestamp
+      createdAt: string; 
+      updatedAt: string; 
     }
 
     interface Tasks {

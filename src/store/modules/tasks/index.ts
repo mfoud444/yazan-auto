@@ -1,6 +1,7 @@
 import { deleteDataFromTable, fetchDataFromTable, insertDataIntoTable, updateDataInTable } from '@/utils/supabasehelper';
 
 import { defineStore } from 'pinia';
+import { useUserStore} from '@/store'
 
 export function initState(): APIAI.Tasks {
   return {
@@ -39,7 +40,11 @@ export const useTasksStore = defineStore('tasks-store', {
 
     async fetchDataAction({ limit, offset }: { limit: number; offset: number }): Promise<void> {
       try {
-        const { data, totalCount } = await fetchDataFromTable<APIAI.Tasks>(tableName, limit, offset);
+        const userStore = useUserStore()
+        const user_id = userStore.userInfo.user?.id
+        console.log(user_id)
+        const filters = {user_id:user_id}
+        const { data, totalCount } = await fetchDataFromTable<APIAI.Tasks>(tableName, limit, offset,filters);
         this.list = data;
         this.countTotalData = totalCount;
       } catch (error: any) {

@@ -57,6 +57,10 @@ async function handleUpdateValue(key: string, item: MenuOption) {
       await router.push({ name: 'modelsai' });
       handleFinish()
       break
+      case 'downloads':
+      await router.push({ name: 'downloads' });
+      handleFinish()
+      break
       case 'tasks':
       await router.push({ name: 'tasks' });
       handleFinish()
@@ -102,6 +106,7 @@ const menuOptions: MenuOption[] = [
         icon: iconRender({ icon: 'material-symbols:dashboard' }),
 
       },
+      
       {
         label: t('common.users'),
         key: 'users',
@@ -111,7 +116,7 @@ const menuOptions: MenuOption[] = [
 
       },
       {
-        label: t('common.agriculturalExpert'),
+        label: t('common.expert'),
         key: 'Agri-Expert',
         icon: iconRender({ icon: 'mdi:account-student' }),
 
@@ -132,16 +137,18 @@ const menuOptions: MenuOption[] = [
 
   {
     type: 'group',
-    label: 'AI Settings',
+    label: 'Tools',
     key: 'public',
     children: [
       {
-        label: t('common.companes'),
+        label: t('common.accounts'),
         key: 'companyai',
 
         icon: iconRender({ icon: 'hugeicons:ai-network' }),
 
       },
+
+
       // {
       //   label: t('common.modelsai'),
       //   key: 'modelsai',
@@ -152,6 +159,14 @@ const menuOptions: MenuOption[] = [
       {
         label: t('common.tasks'),
         key: 'tasks',
+
+        icon: iconRender({ icon: 'hugeicons:ai-network' }),
+
+      },
+
+      {
+        label: t('common.downloads'),
+        key: 'downloads',
 
         icon: iconRender({ icon: 'hugeicons:ai-network' }),
 

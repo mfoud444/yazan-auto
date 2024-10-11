@@ -54,7 +54,7 @@ const cardItems = [
 </script>
 
 <template>
-  <div class="p-4 mx-12 ">
+  <div class="p-4 mx-4 ">
     <h1 class="text-2xl font-bold mb-4 gtext">{{ t('common.Dashboard') }}</h1>
     <NGrid :x-gap="12" :y-gap="12" :cols="isMobile ? 1 : 2">
       <NGridItem v-for="item in cardItems" :key="item.title">

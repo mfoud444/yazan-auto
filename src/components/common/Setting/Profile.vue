@@ -79,12 +79,12 @@ function handleReset() {
 
 <template>
 
-<div class="container_dashboard">
+<div class="container_dashboard w-full bg-red-300">
 
-        <div class="p-8 m-8 shadow-lg mx-20 border-none  flex flex-col gap-2  rounded-lg">
+        <div class=" shadow-lg mx-20 border-none  flex flex-col gap-2  rounded-lg">
             <div class="post-heading mb-1">
       <div class="gtext text-2xl font-bold underlined mb-8">   {{ t('setting.profile')  }}</div>
-    </div>
+    </div class="w-full">
 
     <NForm
       ref="formRef"
@@ -94,8 +94,7 @@ function handleReset() {
       class="space-y-4"
     >
       <NGrid
-        :span="span"
-        :x-gap="24"
+    
       >
         <NFormItemGi
           path="firstName"
