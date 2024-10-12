@@ -43,11 +43,18 @@ import { MainHeader } from '@/components/common';
 
 
  
+        <section class="mt-0 rounded-2xl bg-gradient-to-r from-instagram-purple via-instagram-pink to-instagram-orange text-white py-20">
+        <div class="container mx-auto text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4">Automate Your Instagram Growth</h1>
+            <p class="text-xl mb-8">Boost your followers, engagement, and sales with our powerful automation tools</p>
+            <a href="/admin" class="bg-white text-instagram-pink font-bold py-2 px-4 rounded-full hover:bg-instagram-yellow hover:text-white transition duration-300">Get Started</a>
+        </div>
+    </section>
 
 
 
     <!-- Features Section -->
-    <section class="py-20 mt-20">
+    <section class="py-20 ">
         <div class="container mx-auto">
             <h2 class="text-3xl font-bold text-center mb-12 text-instagram-purple">Our Features</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -68,7 +75,7 @@ import { MainHeader } from '@/components/common';
     </section>
 
     <!-- Pricing Section -->
-    <section class="py-12">
+    <section class="py-0">
         <div class="container mx-auto">
             <h2 class="text-3xl font-bold text-center mb-12 text-instagram-purple">Pricing Plans</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
